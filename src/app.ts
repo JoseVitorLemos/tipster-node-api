@@ -1,7 +1,7 @@
 import express, { Application } from 'express'
 import cors from 'cors'
 import AdmTipsterRoutes from './routes/create-tipster-route'
-import { AuthAdminGuard } from './controller/auth-adm-guard'
+import AuthAdminGuard from './auth/auth-adm-guard'
 
 class App {
 	private app: Application
