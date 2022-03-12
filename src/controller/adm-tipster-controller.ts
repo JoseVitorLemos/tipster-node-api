@@ -2,7 +2,7 @@ import knex from '../infra/database/connection'
 import bcrypt from '../utils/bcrypt'
 import { Request, Response } from 'express'
 
-export default class TipsterController {
+export default class AdmTipsterController {
 	async signup(req: Request, res: Response) {
 		const { userName, password, fullName, telegram, email, whatsapp }	= req.body
 

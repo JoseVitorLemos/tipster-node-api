@@ -1,15 +1,15 @@
 import { Request, Response } from 'express'
 import { Router } from 'express'
-import TipsterController from '../controller/tipster-controller'
+import AdmTipsterController from '../controller/adm-tipster-controller'
 
-class TipsterRoutes {
+class AdmTipsterRoutes {
 	private router: Router
-	private tipster: TipsterController
+	private tipster: AdmTipsterController
 
 	constructor() {
 		this.router = Router()
 		this.routes()
-		this.tipster = new TipsterController()
+		this.tipster = new AdmTipsterController()
 	}
 
 	getRoute() {
@@ -23,4 +23,4 @@ class TipsterRoutes {
 	}
 }
 
-export default new TipsterRoutes
+export default new AdmTipsterRoutes

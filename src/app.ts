@@ -1,6 +1,6 @@
 import express, { Application } from 'express'
 import cors from 'cors'
-import TipsterRoutes from './routes/create-tipster-route'
+import AdmTipsterRoutes from './routes/create-tipster-route'
 import { AuthAdminGuard } from './controller/auth-adm-guard'
 
 class App {
@@ -36,10 +36,10 @@ class App {
 
 	setupRoutes() {
 		this.app.get('/', async (_req, res) => {
-			return res.status(200).send('Welcome to my app')
+			return res.status(200).send('Welcome to tipster api')
 		})
 
-		this.app.use('/api/tipster', AuthAdminGuard, TipsterRoutes.getRoute())
+		this.app.use('/api/tipster', AuthAdminGuard, AdmTipsterRoutes.getRoute())
 	}
 }
 
