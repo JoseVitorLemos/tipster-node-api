@@ -1,7 +1,8 @@
 import express, { Application } from 'express'
 import cors from 'cors'
-import AdmTipsterRoutes from './routes/create-tipster-route'
 import AuthAdminGuard from './auth/auth-adm-guard'
+import AdmTipsterRoutes from './routes/create-tipster-route'
+import TipsterRoutes from './routes/tipster-route'
 
 class App {
 	private app: Application
@@ -39,7 +40,8 @@ class App {
 			return res.status(200).send('Welcome to tipster api')
 		})
 
-		this.app.use('/api/tipster', AuthAdminGuard, AdmTipsterRoutes.getRoute())
+		this.app.use('/api/dev/tipster', AuthAdminGuard, AdmTipsterRoutes.getRoute())
+		this.app.use('/api/tipster', TipsterRoutes.getRoute())
 	}
 }
 

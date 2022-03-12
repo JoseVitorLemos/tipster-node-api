@@ -17,8 +17,8 @@ class TipsterRoutes {
 	}
 
 	private routes() {
-		this.router.post('/signup', async (req: Request, res: Response) => {
-			await this.tipster.signup(req, res)
+		this.router.post('/login', async (req: Request, res: Response) => {
+			await this.tipster.login(req, res)
 		})	
 	}
 }
