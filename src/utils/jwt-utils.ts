@@ -6,7 +6,8 @@ export async function signinLoginToken (id: number) {
 	return { auth: true, accessToken }
 }
 
-export async function refreshToken(userId: string) {
+export async function refreshToken(id: string) {
+  const userId = id.toString()
 	return new Promise((resolve, reject) => {
 		const secret = process.env.REFRESH_TOKEN as string
 		const payload = {}
