@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon -r dotenv/config src/server.ts",
     "start": "node -r dotenv/config dist/src/server.js",
+    "dev": "nodemon -r dotenv/config src/server.ts",
     "knex:migrate": "knex --knexfile knexfile.ts migrate:latest",
     "knex:down": "knex --knexfile knexfile.ts migrate:down"
   },

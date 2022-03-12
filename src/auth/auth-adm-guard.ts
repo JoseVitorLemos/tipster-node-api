@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express'
-import 'dotenv/config'
 import bcrypt from 'bcrypt'
 
 const AuthAdminGuard = (req: Request, res: Response, next: NextFunction) => {
