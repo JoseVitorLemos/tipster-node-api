@@ -1,5 +1,5 @@
 import { Request } from 'express'
 
-export interface tipsterRequest extends Request {
+export interface userRequest extends Request {
   userId?: number
 }

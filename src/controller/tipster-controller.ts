@@ -2,7 +2,7 @@ import knex from '../infra/database/connection'
 import bcrypt from '../utils/bcrypt'
 import { Request, Response } from 'express'
 import { signinLoginToken, refreshToken } from '../utils/jwt-utils'
-import { tipsterRequest } from './interface/tipster-request-interface'
+import { userRequest } from './interface/tipster-request-interface'
 
 export default class TipsterController {
 	async login(req: Request, res: Response) {
@@ -33,12 +33,12 @@ export default class TipsterController {
 		}
 	} 
 
-	async registerLink(req: tipsterRequest, res: Response) {
+	async registerLink(req: userRequest, res: Response) {
 	  const { userId } = req
 
-	  const pass = await bcrypt.genSaltSync()
-	  const secret_key = await bcrypt.hash(pass)
-    const invite_link = `http://localhost:4000/api/register-member?param=${userId}&secret=${secret_key}`
+	  const secret_key = await bcrypt.genSaltSync()
+	  const hash = await bcrypt.hash(secret_key)
+    const invite_link = `http://localhost:4000/api/member/signup/${userId}/${hash}`
 
     try {
       const invite = {
@@ -50,7 +50,7 @@ export default class TipsterController {
 
 		  await knex('invites').insert(invite)
 
-	    res.status(200).json(invite_link)
+	    res.status(200).json({ invite_link })
 	  } catch (err) {
 	    console.error (err)
       return res.status(500).json({ statusCode: 500, message: 'Internal Server Error' })

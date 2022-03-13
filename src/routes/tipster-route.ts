@@ -1,7 +1,8 @@
 import { Request, Response } from 'express'
 import { Router } from 'express'
 import TipsterController from '../controller/tipster-controller'
-import { tipsterRequest } from '../controller/interface/tipster-request-interface'
+import { userRequest } from '../controller/interface/tipster-request-interface'
+import AuthGuard from '../auth/auth-guard'
 
 class TipsterRoutes {
 	private router: Router
@@ -22,7 +23,7 @@ class TipsterRoutes {
 			await this.tipster.login(req, res)
 		})	
 
-    this.router.get('/register-link', async (req: tipsterRequest, res: Response): Promise<void> => {
+    this.router.get('/register-link', AuthGuard, async (req: userRequest, res: Response): Promise<void> => {
 			await this.tipster.registerLink(req, res)
 		})
 	}

@@ -3,6 +3,7 @@ import cors from 'cors'
 import AuthAdminGuard from './auth/auth-adm-guard'
 import AdmTipsterRoutes from './routes/create-tipster-route'
 import TipsterRoutes from './routes/tipster-route'
+import MemberRoutes from './routes/member-route'
 
 class App {
 	private app: Application
@@ -42,6 +43,7 @@ class App {
 
 		this.app.use('/api/dev/tipster', AuthAdminGuard, AdmTipsterRoutes.getRoute())
 		this.app.use('/api/tipster', TipsterRoutes.getRoute())
+		this.app.use('/api/member', MemberRoutes.getRoute())
 	}
 }
 
