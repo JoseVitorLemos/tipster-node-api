@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { Router } from 'express'
 import TipsterController from '../controller/tipster-controller'
+import { tipsterRequest } from '../controller/interface/tipster-request-interface'
 
 class TipsterRoutes {
 	private router: Router
@@ -20,6 +21,10 @@ class TipsterRoutes {
 		this.router.post('/login', async (req: Request, res: Response) => {
 			await this.tipster.login(req, res)
 		})	
+
+    this.router.get('/register-link', async (req: tipsterRequest, res: Response): Promise<void> => {
+			await this.tipster.registerLink(req, res)
+		})
 	}
 }
 

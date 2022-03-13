@@ -2,17 +2,18 @@ import knex from '../infra/database/connection'
 import bcrypt from '../utils/bcrypt'
 import { Request, Response } from 'express'
 import { signinLoginToken, refreshToken } from '../utils/jwt-utils'
+import { tipsterRequest } from './interface/tipster-request-interface'
 
 export default class TipsterController {
 	async login(req: Request, res: Response) {
-		const { userName, email, password }	= req.body
+		const { user_name, email, password }	= req.body
 
-    const condition = userName ? { userName } : { email }
+    const condition = user_name ? { user_name } : { email }
 
 		const tipster = 
-		  await knex('tipster')
+		  await knex('tipsters')
 		  .where(condition)
-		  .select('tipster.id', 'tipster.password')
+		  .select('tipsters.id', 'tipsters.password')
 		  .first()
 
 		if(!tipster) return res.status(400).json({ statusCode: 400, message: 'Invalid login or password provided' }).end()
@@ -31,4 +32,28 @@ export default class TipsterController {
 		  res.status(400).json({ statusCode: 400, message: 'Invalid password' })
 		}
 	} 
+
+	async registerLink(req: tipsterRequest, res: Response) {
+	  const { userId } = req
+
+	  const pass = await bcrypt.genSaltSync()
+	  const secret_key = await bcrypt.hash(pass)
+    const invite_link = `http://localhost:4000/api/register-member?param=${userId}&secret=${secret_key}`
+
+    try {
+      const invite = {
+        secret_key, 
+        invite_link, 
+        created_at: new Date(),
+        tipster_id: userId
+      }
+
+		  await knex('invites').insert(invite)
+
+	    res.status(200).json(invite_link)
+	  } catch (err) {
+	    console.error (err)
+      return res.status(500).json({ statusCode: 500, message: 'Internal Server Error' })
+	  }
+	}
 }

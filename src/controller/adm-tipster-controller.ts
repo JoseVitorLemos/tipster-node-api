@@ -4,22 +4,24 @@ import { Request, Response } from 'express'
 
 export default class AdmTipsterController {
 	async signup(req: Request, res: Response) {
-		const { userName, password, fullName, telegram, email, whatsapp }	= req.body
+		const { user_name, password, first_name, last_name, telegram, email, whatsapp, birth_date }	= req.body
 
 		const hashedPassword = await bcrypt.hash(password)
 
-		const newUser = {
-      userName, 
+		const newTipster = {
+		  user_name,
+      first_name, 
+      last_name, 
 			password: hashedPassword,
-      fullName, 
       telegram, 
       email, 
       whatsapp,
-			createdAt: new Date()
+      birth_date: birth_date,
+			created_at: new Date()
 		}
 
-		const findUserName = await knex('tipster').where({ userName }).first()
-		const findEmail = await knex('tipster').where({ email }).first()
+		const findUserName = await knex('tipsters').where({ user_name }).first()
+		const findEmail = await knex('tipsters').where({ email }).first()
 
 		if(findUserName || findEmail) { 
       const text = findUserName ? 'name' : 'email' 
@@ -27,13 +29,13 @@ export default class AdmTipsterController {
 		}
 
 	  try {
-		  const id = await knex('tipster').insert(newUser).returning('id').then(prop => prop[0].id)
+		  const id = await knex('tipsters').insert(newTipster).returning('id').then(prop => prop[0].id)
 
 		  const tipster = 
-		    await knex('tipster')
+		    await knex('tipsters')
 		    .where({ id })
-		    .from('tipster as t')
-		    .select('t.id', 't.userName', 't.fullName', 't.telegram', 't.email', 't.whatsapp', 't.createdAt')
+		    .from('tipsters as t')
+		    .select('t.id', 't.user_name', 't.first_name', 't.last_name', 't.telegram', 't.email', 't.whatsapp', 't.created_at', 't.birth_date')
 		    .first()
 
 		  return res.status(200).json({ ...tipster })

@@ -8,6 +8,10 @@ class Bcrypt {
 	async hash(password: string): Promise<string> {
 		return bcrypt.hash(password, 10)
 	}
+
+	async genSaltSync(): Promise<string> {
+		return bcrypt.genSaltSync(8)
+	}
 }
 
 export default new Bcrypt

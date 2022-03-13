@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken'
 
 export async function signinLoginToken (id: number) {
 	const privateKey = process.env.TOKEN!
-  const accessToken = jwt.sign({ userId: id }, privateKey, { expiresIn: '1h' })
+  const accessToken = jwt.sign({ userId: id }, privateKey, { expiresIn: '30 days' })
 	return { auth: true, accessToken }
 }
 
@@ -13,7 +13,7 @@ export async function refreshToken(id: string) {
 		const payload = {}
 
 		const options = {
-			expiresIn: '30d',
+			expiresIn: '120 days',
 			audience: userId
 		}
 
