@@ -38,3 +38,6 @@ export async function verifyRefreshToken(refreshToken: string) {
 		})
 	})
 }
+
+const jsonwebtoken = jwt
+export default jsonwebtoken

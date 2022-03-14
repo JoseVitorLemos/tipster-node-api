@@ -1,7 +1,7 @@
 import knex from '../infra/database/connection'
 import bcrypt from '../utils/bcrypt'
 import { Request, Response } from 'express'
-import { signinLoginToken, refreshToken } from '../utils/jwt-utils'
+import jwt, { signinLoginToken, refreshToken } from '../utils/jwt-utils'
 import { userRequest } from './interface/tipster-request-interface'
 
 export default class TipsterController {
@@ -35,25 +35,33 @@ export default class TipsterController {
 
 	async registerLink(req: userRequest, res: Response) {
 	  const { userId } = req
-
 	  const secret_key = await bcrypt.genSaltSync()
-	  const hash = await bcrypt.hash(secret_key)
-    const invite_link = `http://localhost:4000/api/member/signup/${userId}/${hash}`
+	  return new Promise((resolve, reject) => {
+		  jwt.sign({ userId }, secret_key, {}, async (err, token) => {
 
-    try {
-      const invite = {
-        secret_key, 
-        invite_link, 
-        created_at: new Date(),
-        tipster_id: userId
-      }
+        const invite = {
+          secret_key, 
+          created_at: new Date(),
+          tipster_id: userId
+        }
 
-		  await knex('invites').insert(invite)
+        const transaction = await knex.transaction()
 
-	    res.status(200).json({ invite_link })
-	  } catch (err) {
-	    console.error (err)
-      return res.status(500).json({ statusCode: 500, message: 'Internal Server Error' })
-	  }
+		    const id = await transaction('invites').insert(invite).returning('id').then(prop => prop[0].id)
+
+        const invite_link = `http://localhost:4000/api/member/signup/${id}/${token}`
+
+		    await transaction('invites').where({ id }).update({ invite_link })
+
+		    await transaction.commit()
+
+			  if(err) {
+				  console.log(err.message)
+				  reject(new Error(err.message))
+			  }
+			  resolve(token)
+	      return res.status(200).json({ invite_link })
+		  })
+	  })
 	}
 }
