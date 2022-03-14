@@ -30,6 +30,10 @@ class TipsterRoutes {
     this.router.get('/invite-links', AuthGuard, async (req: userRequest, res: Response): Promise<void> => {
 			await this.tipster.inviteLinks(req, res)
 		})
+
+  this.router.get('/members', AuthGuard, async (req: userRequest, res: Response): Promise<void> => {
+			await this.tipster.findMembers(req, res)
+		})
 	}
 }
 

@@ -66,8 +66,14 @@ export default class TipsterController {
 	}
 
 	async inviteLinks(req: userRequest, res: Response) {
-	  const { userId } = req
-	  const invites = await knex('invites').where('tipster_id', userId).select()
+	  const tipster_id = req.userId
+	  const invites = await knex('invites').where({ tipster_id }).select()
+	  if(invites) res.status(200).send(invites).end()
+  }
+
+	async findMembers(req: userRequest, res: Response) {
+	  const tipster_id = req.userId
+	  const invites = await knex('members').where({ tipster_id }).select()
 	  if(invites) res.status(200).send(invites).end()
   }
 }
