@@ -73,7 +73,25 @@ export default class TipsterController {
 
 	async findMembers(req: userRequest, res: Response) {
 	  const tipster_id = req.userId
-	  const invites = await knex('members').where({ tipster_id }).select()
+
+	  const invites = 
+	    await knex('members')
+	    .where({ tipster_id })
+	    .from('members as m')
+	    .select(
+		    'm.id',
+		    'm.user_name', 
+		    'm.first_name', 
+		    'm.last_name', 
+		    'm.telegram', 
+		    'm.email', 
+		    'm.whatsapp', 
+		    'm.created_at', 
+		    'm.updated_at', 
+		    'm.birth_date', 
+		    'm.activity_status'
+		  )
+
 	  if(invites) res.status(200).send(invites).end()
   }
 
@@ -101,7 +119,8 @@ export default class TipsterController {
 	async findMembersInactive(req: userRequest, res: Response) {
 	  const tipster_id = req.userId
 
-	  const member = await knex('members')
+	  const member = 
+	    await knex('members')
 	    .where({ activity_status: false })
 	    .from('members as m')
 		  .select(
