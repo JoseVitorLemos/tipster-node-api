@@ -36,9 +36,9 @@ export default class TipsterController {
 	async registerLink(req: userRequest, res: Response) {
 	  const { userId } = req
 	  const secret_key = await bcrypt.genSaltSync()
+
 	  return new Promise((resolve, reject) => {
 		  jwt.sign({ userId }, secret_key, {}, async (err, token) => {
-
         const invite = {
           secret_key, 
           created_at: new Date(),
@@ -49,7 +49,7 @@ export default class TipsterController {
 
 		    const id = await transaction('invites').insert(invite).returning('id').then(prop => prop[0].id)
 
-        const invite_link = `http://localhost:4000/api/member/signup/${id}/${token}`
+        const invite_link = `/api/member/signup/${id}/${token}`
 
 		    await transaction('invites').where({ id }).update({ invite_link })
 
@@ -75,5 +75,26 @@ export default class TipsterController {
 	  const tipster_id = req.userId
 	  const invites = await knex('members').where({ tipster_id }).select()
 	  if(invites) res.status(200).send(invites).end()
+  }
+
+	async memberActive(req: userRequest, res: Response) {
+	  const tipster_id = req.userId
+	  const { activity_status, member_id } = req.body
+
+	  const member = await knex('members')
+	    .where({ id: member_id, tipster_id })
+	    .select().first()
+
+    if(!member) return res.status(400).json({ statusCode: 400, message: 'This member was not found' })
+
+		const [updatedMember] = 
+		  await knex('members')
+		  .where({ id: member_id })
+		  .update({ activity_status, updated_at: new Date() })
+		  .returning('*')
+
+    delete updatedMember.password
+
+		res.send(updatedMember)
   }
 }

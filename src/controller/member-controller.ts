@@ -38,6 +38,7 @@ export default class TipsterController {
           whatsapp,
           birth_date: birth_date,
           tipster_id,
+          activity_status: true,
 			    created_at: new Date()
 		    }
 

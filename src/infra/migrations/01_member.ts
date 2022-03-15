@@ -10,6 +10,7 @@ export async function up(knex: Knex) {
 		table.string('first_name').notNullable()
 		table.string('last_name').notNullable()
 		table.string('password').notNullable()
+		table.boolean('activity_status').notNullable()
 		table.date('birth_date').notNullable()
 		table.dateTime('created_at').notNullable()
 		table.dateTime('updated_at').nullable()

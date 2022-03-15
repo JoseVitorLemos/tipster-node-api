@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from 'express'
-import jwt, { VerifyCallback } from 'jsonwebtoken'
+import { Response, NextFunction } from 'express'
+import jwt from 'jsonwebtoken'
 import { userRequest } from '../controller/interface/tipster-request-interface'
 
 const AuthGuard = (req: userRequest, res: Response, next: NextFunction) => {
