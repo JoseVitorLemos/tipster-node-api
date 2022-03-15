@@ -79,4 +79,32 @@ export default class MemberController {
 		  return res.status(500).json({ statusCode: 500, message: 'Internal Server Error'})
 	  }
   }
+
+	async login(req: Request, res: Response) {
+		const { user_name, email, password }	= req.body
+
+    const condition = user_name ? { user_name } : { email }
+
+		const members = 
+		  await knex('members')
+		  .where(condition)
+		  .select('members.id', 'members.password')
+		  .first()
+
+		if(!members) return res.status(400).json({ statusCode: 400, message: 'Invalid login or password provided' }).end()
+
+		const validate = await bcrypt.compare(password, members.password)
+
+		if(validate) {
+      const id = members.id
+
+      const token = await signinLoginToken(id)
+      const refresh = await refreshToken(id)
+
+      res.status(200).send({ ...token, refreshToken: refresh })
+
+		} else {
+		  res.status(400).json({ statusCode: 400, message: 'Invalid password' })
+		}
+	} 
 }

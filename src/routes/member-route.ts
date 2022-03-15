@@ -20,6 +20,10 @@ class MemberRoutes {
 		this.router.post('/signup/:id/:secret', async (req: Request, res: Response) => {
 			await this.member.signup(req, res)
 		})	
+
+		this.router.post('/login', async (req: Request, res: Response) => {
+			await this.member.login(req, res)
+		})	
 	}
 }
 
