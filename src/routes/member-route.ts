@@ -4,12 +4,12 @@ import MemberController from '../controller/member-controller'
 
 class MemberRoutes {
 	private router: Router
-	private tipster: MemberController
+	private member: MemberController
 
 	constructor() {
 		this.router = Router()
 		this.routes()
-		this.tipster = new MemberController()
+		this.member = new MemberController()
 	}
 
 	getRoute() {
@@ -18,7 +18,7 @@ class MemberRoutes {
 
 	private routes() {
 		this.router.post('/signup/:id/:secret', async (req: Request, res: Response) => {
-			await this.tipster.signup(req, res)
+			await this.member.signup(req, res)
 		})	
 	}
 }

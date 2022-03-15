@@ -3,7 +3,7 @@ import bcrypt from '../utils/bcrypt'
 import { Request, Response } from 'express'
 import jwt, { signinLoginToken, refreshToken } from '../utils/jwt-utils'
 
-export default class TipsterController {
+export default class MemberController {
 	async signup(req: Request, res: Response) {
 		const { id, secret } = req.params
 
