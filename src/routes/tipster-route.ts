@@ -39,7 +39,9 @@ class TipsterRoutes {
 			await this.tipster.memberActive(req, res)
 		})
 
-
+    this.router.get('/members-inactive', AuthGuard, async (req: userRequest, res: Response): Promise<void> => {
+			await this.tipster.findMembersInactive(req, res)
+		})
 	}
 }
 

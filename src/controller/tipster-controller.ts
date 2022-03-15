@@ -95,6 +95,31 @@ export default class TipsterController {
 
     delete updatedMember.password
 
-		res.send(updatedMember)
+		res.status(200).send(updatedMember)
+  }
+
+	async findMembersInactive(req: userRequest, res: Response) {
+	  const tipster_id = req.userId
+
+	  const member = await knex('members')
+	    .where({ activity_status: false })
+	    .from('members as m')
+		  .select(
+		    'm.id',
+		    'm.user_name', 
+		    'm.first_name', 
+		    'm.last_name', 
+		    'm.telegram', 
+		    'm.email', 
+		    'm.whatsapp', 
+		    'm.created_at', 
+		    'm.updated_at', 
+		    'm.birth_date', 
+		    'm.activity_status'
+		  )
+
+    if(!member) return res.status(400).json({ statusCode: 400, message: 'Found no members inactive' })
+
+		return res.status(200).json(member)
   }
 }
